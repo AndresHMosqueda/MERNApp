@@ -1,6 +1,6 @@
 import React from "react";
 
-import { v4 as uuidv4 } from "uuid";
+import uuid from "uuid";
 import proyectoContext from "./proyectoContext";
 import proyectoReducer from "./proyectoReducer";
 import { useReducer } from "react";
@@ -45,7 +45,7 @@ const ProyectoState = props => {
 
   //Agregar nuevo proyecto
   const agregarProyecto = proyecto => {
-    proyecto.id = uuidv4();
+    proyecto.id = uuid.v4();
     //Insertar el proyecto en el state
     dispatch({
       type: AGREGAR_PROYECTO,

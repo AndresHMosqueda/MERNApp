@@ -1,8 +1,9 @@
 import React, { useReducer } from "react";
 import TareaContext from "./tareaContext";
 import TareaReducer from "./tareaReducer";
+import uuid from 'uuid';
 
-import { TAREAS_PROYECTO, AGREGAR_TAREA,VALIDAR_TAREA, ELIMINAR_TAREA, ESTADO_TAREA  } from "../../types";
+import { TAREAS_PROYECTO, AGREGAR_TAREA,VALIDAR_TAREA, ELIMINAR_TAREA, ESTADO_TAREA, TAREA_ACTUAL, ACTUALIZAR_TAREA  } from "../../types";
 
 
 const TareaState = props => {
@@ -13,13 +14,36 @@ const TareaState = props => {
       { id:3, nombre: "Elegir Pla", estado: false, proyectoId: 3 }
     ],
     tareasProyecto: null,
-    errortarea: false
+    errortarea: false,
+    tareaseleccionada: null,
   };
 
   //Crear dispatch y state
   const [state, dispatch] = useReducer(TareaReducer, initialState);
 
+   //Editar o modifica una tarea
+   const actualizarTarea = tarea => {
+    dispatch({
+      type: ACTUALIZAR_TAREA,
+      payload: tarea
+    })
+  }
+
+  //Extraer una tarea par edicion
+  const guardarTareaActual = tarea => {
+    dispatch({
+      type: TAREA_ACTUAL,
+      payload: tarea
+    })
+  }
+
   //Crear las funciones
+  const cambiarEstadoTarea = tarea => {
+    dispatch({
+      type: ESTADO_TAREA,
+      payload: tarea
+    })
+  }
 
   //Obtener las tareas de un proyecto
   const obtenerTareas = proyectoId => {
@@ -31,6 +55,7 @@ const TareaState = props => {
 
   //Agregar una tarea al proyecto seleccionado
   const agregarTarea = tarea => {
+    tarea.id = uuid.v4();
     dispatch({
       type: AGREGAR_TAREA,
       payload: tarea
@@ -59,10 +84,14 @@ const TareaState = props => {
     tareas: state.tareas,
     tareasProyecto: state.tareasProyecto,
     errortarea: state.errortarea,
+    tareaseleccionada: state.tareaseleccionada,
     obtenerTareas,
     agregarTarea,
     validarTarea,
-    eliminarTarea
+    actualizarTarea,
+    eliminarTarea,
+    cambiarEstadoTarea,
+    guardarTareaActual
      }}
     >
       {props.children}
